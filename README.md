@@ -193,20 +193,63 @@ ykc-parser/
 
 ## 作为Claude技能使用
 
-本项目可作为Claude Code技能使用，配置文件位于`.claude-plugin/marketplace.json`。
+本项目可作为Claude Code技能使用，让Claude自动解析云快充报文。
 
-在Claude Code中调用：
+### 安装方法
+
+#### 方法1: 从GitHub克隆（推荐）
+
+1. 打开终端，进入Claude技能目录：
+```bash
+cd ~/.claude/skills
 ```
-请使用ykc-parser技能解析这个报文: 68 22 0000 00 01 ...
+
+2. 克隆本仓库：
+```bash
+git clone https://github.com/DaYePython/ykc-parser.git
 ```
 
-## 开发计划
+3. 重启Claude Code或重新加载技能列表
 
-- [ ] 支持更多帧类型的详细解析
-- [ ] 添加报文生成功能
-- [ ] 提供Web API接口
-- [ ] 增加批量解析功能
-- [ ] 支持实时监控和日志分析
+#### 方法2: 手动下载
+
+1. 下载本仓库的ZIP文件：
+   - 访问 https://github.com/DaYePython/ykc-parser
+   - 点击 "Code" > "Download ZIP"
+
+2. 解压到Claude技能目录：
+   - Windows: `C:\Users\<你的用户名>\.claude\skills\ykc-parser`
+   - macOS/Linux: `~/.claude/skills/ykc-parser`
+
+3. 重启Claude Code
+
+### 验证安装
+
+安装完成后，在Claude Code中输入：
+```
+/skills
+```
+查看技能列表中是否有`ykc-parser`。
+
+### 使用示例
+
+安装成功后，你可以直接在Claude Code中使用：
+
+```
+帮我解析这个云快充报文: 68 22 0000 00 01 55031412782305 00 02 0F 56342E312E353000 01 01010101010101010101 04 675A
+```
+
+或者明确调用技能：
+```
+使用ykc-parser技能解析报文: 68 40 1A03 00 13 ...
+```
+
+Claude会自动：
+1. 识别这是云快充报文解析任务
+2. 调用解析脚本
+3. 返回结构化的JSON结果
+4. 解释报文内容
+
 
 ## 许可证
 
