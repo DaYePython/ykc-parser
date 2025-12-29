@@ -197,7 +197,20 @@ ykc-parser/
 
 ### 安装方法
 
-#### 方法1: 从GitHub克隆（推荐）
+#### 方法1: 从Claude Marketplace安装（推荐）
+
+1. 在Claude Code中输入：
+```
+/marketplace
+```
+
+2. 搜索 `ykc-parser` 或 `云快充`
+
+3. 点击安装即可
+
+这是最简单的安装方式，Claude会自动下载和配置技能。
+
+#### 方法2: 从GitHub克隆
 
 1. 打开终端，进入Claude技能目录：
 ```bash
@@ -211,7 +224,7 @@ git clone https://github.com/DaYePython/ykc-parser.git
 
 3. 重启Claude Code或重新加载技能列表
 
-#### 方法2: 手动下载
+#### 方法3: 手动下载
 
 1. 下载本仓库的ZIP文件：
    - 访问 https://github.com/DaYePython/ykc-parser
