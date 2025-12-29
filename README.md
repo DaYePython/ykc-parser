@@ -199,16 +199,19 @@ ykc-parser/
 
 #### 方法1: 从Claude Marketplace安装（推荐）
 
-1. 在Claude Code中输入：
+1. 首先注册本仓库到Claude Code的Marketplace：
+```
+/plugin marketplace add DaYePython/ykc-parser
+```
+
+2. 然后在Claude Code中打开Marketplace：
 ```
 /marketplace
 ```
 
-2. 搜索 `ykc-parser` 或 `云快充`
+3. 搜索 `ykc-parser` 或 `云快充`，点击安装即可
 
-3. 点击安装即可
-
-这是最简单的安装方式，Claude会自动下载和配置技能。
+这是最简单的安装方式，Claude会自动下载和配置技能。只需在首次使用时注册一次marketplace。
 
 #### 方法2: 从GitHub克隆
 
