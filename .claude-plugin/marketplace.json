@@ -1,0 +1,89 @@
+{
+  "name": "ykc-parser",
+  "displayName": "云快充报文解析器",
+  "description": "解析云快充充电桩通信协议报文,支持CRC16校验、多种帧类型解析、错误诊断,返回标准JSON格式。用于处理云快充协议V1.6的报文数据。",
+  "version": "1.0.0",
+  "author": {
+    "name": "yesongsheng",
+    "email": ""
+  },
+  "category": "工具",
+  "tags": [
+    "协议解析",
+    "云快充",
+    "充电桩",
+    "CRC16",
+    "十六进制",
+    "通信协议"
+  ],
+  "capabilities": [
+    "解析云快充协议V1.6报文",
+    "CRC16校验验证",
+    "多种帧类型解析(登录认证、实时数据、心跳包等)",
+    "数据类型转换(BCD码、BIN码、ASCII码)",
+    "错误诊断和容错处理",
+    "标准JSON格式输出"
+  ],
+  "useCases": [
+    "解析云快充协议的十六进制报文",
+    "诊断云快充通信问题",
+    "验证报文的CRC校验码",
+    "查看报文的详细字段内容",
+    "开发或调试云快充充电桩通信程序"
+  ],
+  "supportedFrameTypes": [
+    {
+      "code": "0x01",
+      "name": "充电桩登录认证"
+    },
+    {
+      "code": "0x02",
+      "name": "登录认证应答"
+    },
+    {
+      "code": "0x12",
+      "name": "读取实时监测数据"
+    },
+    {
+      "code": "0x13",
+      "name": "上传实时监测数据"
+    }
+  ],
+  "requirements": {
+    "python": ">=3.6"
+  },
+  "files": {
+    "main": "scripts/parse_ykc.py",
+    "crc": "scripts/crc16.py",
+    "documentation": "SKILL.md",
+    "references": [
+      "references/protocol_structure.md",
+      "references/data_formats.md",
+      "references/frame_types.md"
+    ]
+  },
+  "examples": [
+    {
+      "title": "解析登录认证报文",
+      "input": "68 22 0000 00 01 55031412782305 00 02 0F 56342E312E353000 01 01010101010101010101 04 675A",
+      "description": "解析一个完整的登录认证报文,包含桩编码、桩类型、枪数、协议版本等信息"
+    },
+    {
+      "title": "解析实时监测数据",
+      "input": "68 40 1A03 00 13 ...",
+      "description": "解析实时监测数据报文,包含电压、电流、SOC、充电度数等信息"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "repository": "",
+  "keywords": [
+    "云快充",
+    "充电桩",
+    "协议解析",
+    "CRC16",
+    "报文解析",
+    "物联网",
+    "IoT"
+  ]
+}
