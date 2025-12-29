@@ -35,6 +35,8 @@ from frame_parsers import (
     # 并充模式类
     ParallelChargingRequestParser, ParallelChargingConfirmParser,
     ParallelChargingReplyParser, ParallelChargingCommandParser,
+    # 二维码管理类
+    QRCodePrefixSetParser, QRCodePrefixSetResponseParser,
 )
 
 
@@ -103,6 +105,10 @@ class FrameParserFactory:
         0xA2: ParallelChargingConfirmParser,
         0xA3: ParallelChargingReplyParser,
         0xA4: ParallelChargingCommandParser,
+
+        # 二维码管理类 (0xF0-0xF1)
+        0xF0: QRCodePrefixSetParser,
+        0xF1: QRCodePrefixSetResponseParser,
     }
 
     @classmethod

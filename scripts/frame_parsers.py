@@ -1838,3 +1838,78 @@ class ParallelChargingCommandParser(FrameParser):
         result["control_command_code"] = control_cmd
 
         return result
+
+
+class QRCodePrefixSetParser(FrameParser):
+    """后台下发二维码前缀指令 (0xF0)"""
+
+    @property
+    def expected_min_length(self) -> int:
+        return 9  # 7(桩编码) + 1(前缀编码) + 1(前缀长度) = 9
+
+    def parse(self, body: bytes) -> Dict[str, Any]:
+        if not self.validate_length(body):
+            return {}
+
+        result = {}
+        offset = 0
+
+        # 桩编码 (7字节 BCD码)
+        result["pile_code"] = self.context.bcd_to_str(body[offset:offset+7])
+        offset += 7
+
+        # 二维码前缀编码 (1字节)
+        prefix_format = body[offset]
+        prefix_formats = {
+            0x00: "第一种前缀+桩编号",
+            0x01: "第二种前缀+组织号+桩编号"
+        }
+        result["qrcode_prefix_format"] = prefix_formats.get(prefix_format, f"未知({prefix_format})")
+        result["qrcode_prefix_format_code"] = prefix_format
+        offset += 1
+
+        # 二维码前缀长度 (1字节)
+        prefix_length = body[offset]
+        result["qrcode_prefix_length"] = prefix_length
+        offset += 1
+
+        # 二维码前缀 (可变长度 ASCII)
+        if len(body) >= offset + prefix_length:
+            prefix_bytes = body[offset:offset+prefix_length]
+            result["qrcode_prefix"] = self.context.ascii_to_str(prefix_bytes)
+            result["qrcode_prefix_hex"] = prefix_bytes.hex()
+        else:
+            self.context.warnings.append(f"二维码前缀数据不完整: 期望{prefix_length}字节，实际{len(body)-offset}字节")
+            result["qrcode_prefix"] = "数据不完整"
+            result["qrcode_prefix_hex"] = ""
+
+        return result
+
+
+class QRCodePrefixSetResponseParser(FrameParser):
+    """桩应答返回下发二维码前缀指令 (0xF1)"""
+
+    @property
+    def expected_min_length(self) -> int:
+        return 8  # 7(桩编码) + 1(下发结果) = 8
+
+    def parse(self, body: bytes) -> Dict[str, Any]:
+        if not self.validate_length(body):
+            return {}
+
+        result = {}
+        offset = 0
+
+        # 桩编码 (7字节 BCD码)
+        result["pile_code"] = self.context.bcd_to_str(body[offset:offset+7])
+        offset += 7
+
+        # 下发结果 (1字节)
+        set_result = body[offset]
+        result["set_result"] = "成功" if set_result == 0x01 else "失败"
+        result["set_result_code"] = set_result
+
+        if set_result == 0x01:
+            self.context.warnings.append("注意: 返回成功不代表二维码一定设置成功，需要确认厂商实现方式")
+
+        return result

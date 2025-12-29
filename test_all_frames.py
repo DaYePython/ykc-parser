@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent / "scripts"))
 
 # 强制使用重构版本
 from parse_ykc import YKCProtocolParser as Parser
-print("使用重构版本解析器 (parse_ykc_v2.py)")
+print("使用重构版本解析器 (parse_ykc    .py)")
 
 
 class TestCaseGenerator:
@@ -457,6 +457,22 @@ class TestCaseGenerator:
              "68 0C 0063 00 A4 "
              "32010200000001 "  # 桩编码
              "00 "  # 控制命令
+             "0000"),  # CRC
+
+            # ==================== 二维码管理类 (0xF0-0xF1) ====================
+            ("二维码管理类", "后台下发二维码前缀指令 (0xF0)",
+             "68 5E 0006 00 F0 "
+             "3610009512403201 "  # 桩编码 7字节
+             "01 "  # 二维码前缀编码 (第二种格式)
+             "51 "  # 二维码前缀长度 (81字节)
+             "68747470733a2f2f6368617267696e672e667a63736e792e636f6d2f636f64652f67756e44657461696c3f6f72674e6f3d4d4133383631375938266964"
+             "3d313836302663617253636f70653d31266e6f3d "  # 二维码前缀 (ASCII: https://charging.fzcsny.com/code/gunDetail?orgNo=MA38617Y8&id=1860&carScope=1&no=)
+             "0000"),  # CRC
+
+            ("二维码管理类", "桩应答返回下发二维码前缀指令 (0xF1)",
+             "68 0C 0006 00 F1 "
+             "3610009512403201 "  # 桩编码 7字节
+             "01 "  # 下发结果 (成功)
              "0000"),  # CRC
         ]
 
