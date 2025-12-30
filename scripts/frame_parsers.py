@@ -1874,14 +1874,21 @@ class QRCodePrefixSetParser(FrameParser):
         offset += 1
 
         # 二维码前缀 (可变长度 ASCII)
-        if len(body) >= offset + prefix_length:
-            prefix_bytes = body[offset:offset+prefix_length]
-            result["qrcode_prefix"] = self.context.ascii_to_str(prefix_bytes)
-            result["qrcode_prefix_hex"] = prefix_bytes.hex()
-        else:
-            self.context.warnings.append(f"二维码前缀数据不完整: 期望{prefix_length}字节，实际{len(body)-offset}字节")
-            result["qrcode_prefix"] = "数据不完整"
-            result["qrcode_prefix_hex"] = ""
+        remaining = len(body) - offset
+        take = max(0, min(prefix_length, remaining))
+        prefix_bytes = body[offset:offset+take]
+
+        result["qrcode_prefix"] = self.context.ascii_to_str(prefix_bytes) if take > 0 else ""
+        result["qrcode_prefix_hex"] = prefix_bytes.hex().upper()
+
+        if remaining < prefix_length:
+            self.context.warnings.append(
+            f"二维码前缀数据不完整: 期望{prefix_length}字节，实际{remaining}字节"
+            )
+        elif remaining > prefix_length:
+            self.context.warnings.append(
+            f"二维码前缀数据长度超出预期: 期望{prefix_length}字节，实际{remaining}字节"
+            )
 
         return result
 
