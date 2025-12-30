@@ -262,7 +262,8 @@ class YKCProtocolParser:
         # 7. CRC校验
         if len(data) >= body_end + 2:
             crc_bytes = data[body_end:body_end + 2]
-            crc_received = int.from_bytes(crc_bytes, byteorder='little')
+            # 接收到的CRC字节序与计算值顺序相反，按大端解析以匹配计算结果
+            crc_received = int.from_bytes(crc_bytes, byteorder='big')
             result["crc16_received"] = f"0x{crc_received:04X}"
 
             # 计算CRC(从序列号到消息体)
